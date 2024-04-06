@@ -15,7 +15,7 @@ class ChatPDF:
     chain = None
 
     def __init__(self):
-        self.model = ChatOllama(model="mistral")
+        self.model = ChatOllama(model="mistral", temperature=0, seed=1)
         self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1024, chunk_overlap=100)
         self.prompt = PromptTemplate.from_template(
             """
@@ -41,7 +41,8 @@ class ChatPDF:
                 "score_threshold": 0.5,
             },
         )
-
+        print("Context:")
+        print(self.retriever)
         self.chain = ({"context": self.retriever, "question": RunnablePassthrough()}
                       | self.prompt
                       | self.model
